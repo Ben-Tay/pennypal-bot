@@ -6,7 +6,7 @@ import os
 import sys
 import time
 from datetime import datetime
-from io import BytesIO
+from io import BytesIO, StringIO
 
 from dotenv import load_dotenv
 
@@ -325,12 +325,12 @@ async def cmd_export(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not rows:
         await update.message.reply_html("Nothing to export yet this month.")
         return
-    buf = BytesIO()
-    writer = csv.writer(buf)
+    text_io = StringIO()
+    writer = csv.writer(text_io)
     writer.writerow(["date", "amount", "category", "description"])
     for r in sorted(rows, key=lambda x: x["created_at"]):
         writer.writerow([r["created_at"], f"{r['amount']:.2f}", r["category"], r["description"]])
-    buf.seek(0)
+    buf = BytesIO(text_io.getvalue().encode("utf-8"))
     buf.name = f"expenses-{month_key}.csv"
     await update.message.reply_document(document=buf, filename=buf.name)
 
