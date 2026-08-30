@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: pennypal-bot
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn --workers 1 --threads 4 --timeout 120 --bind 0.0.0.0:$PORT api.index:app
+    healthCheckPath: /
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.11.8"
+      - key: TIMEZONE
+        value: Asia/Singapore
+      - key: CURRENCY
+        value: "S$"
+      - key: BOT_TOKEN
+        sync: false
+      - key: REDIS_URL
+        sync: false
+      - key: TELEGRAM_WEBHOOK_SECRET
+        sync: false

@@ -1,0 +1,8 @@
+python-telegram-bot>=21.0
+python-dotenv>=1.0
+matplotlib>=3.8
+tzdata>=2024.1
+flask>=3.0
+gunicorn>=21.2
+redis>=5.0
+libsql-client>=0.3
