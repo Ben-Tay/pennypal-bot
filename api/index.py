@@ -17,7 +17,7 @@ from telegram import Update
 from telegram.ext import Application
 
 import bot as bot_module
-import store
+from store import store
 
 application = None
 _ready = False
@@ -39,6 +39,9 @@ async def process_update(body: dict) -> None:
         update = Update.de_json(body, application.bot)
         if update is not None:
             await application.process_update(update)
+    close = getattr(store, "close", None)
+    if close is not None:
+        await close()
 
 
 @app.route("/", defaults={"path": ""}, methods=["GET"])
